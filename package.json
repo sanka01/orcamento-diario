@@ -7,6 +7,7 @@
     "test": "ssc build -r -o --test=./test/index.js --headless",
     "init-project": "ssc init",
     "start": "ssc build -r -o",
+    "server": "node web_dev.js",
     "build": "ssc build -o"
   },
   "keywords": [],
