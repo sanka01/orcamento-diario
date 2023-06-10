@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, viewport-fit=cover, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="
+        connect-src http://localhost:8080 ipc://* file://* socket:*;
+        child-src 'none';
+        img-src https: data: file:;
+      "
+    >
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css">
+    <script src="index.js" type="module"></script>
+    <title>Hello, World</title>
+  </head>
+  <body>
+    <my-app id="root"></my-app>
+  </body>
+</html>
