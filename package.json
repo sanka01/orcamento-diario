@@ -19,6 +19,9 @@
   },
   "type": "module",
   "dependencies": {
-    "@socketsupply/tonic": "^15.1.1"
+    "@socketsupply/tonic": "^15.1.1",
+    "b4a": "^1.6.4",
+    "hyper-sdk": "^4.2.5",
+    "hyperswarm": "^4.5.1"
   }
 }
