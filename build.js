@@ -4,7 +4,7 @@
 //
 import fs from 'node:fs'
 import path from 'node:path'
-
+import optsBuild from './opts.build.js'
 import esbuild from 'esbuild'
 
 const cp = async (a, b) => fs.promises.cp(
@@ -14,16 +14,7 @@ const cp = async (a, b) => fs.promises.cp(
 )
 
 async function main () {
-  const prod = process.argv.find(s => s.includes('--prod'))
-
-  const params = {
-    entryPoints: ['src/index.js'],
-    format: 'esm',
-    bundle: true,
-    minify: !!prod,
-    sourcemap: !prod,
-    external: ['socket:*']
-  }
+  const params = optsBuild
 
   const watch = process.argv.find(s => s.includes('--watch='))
 
