@@ -1,5 +1,6 @@
 import Tonic from '@socketsupply/tonic'
 import { registerGenericHandlers } from './eventHandling'
+import { configureSaveAndLoadState } from './persistenceHandling'
 
 const actions = {
   openAddExpense (_e, update) {
@@ -20,8 +21,15 @@ const actions = {
 export class DailyBudget extends Tonic {
   constructor (...args) {
     super(...args)
-    this.state = JSON.parse(window.localStorage.getItem(this.id)) ?? {}
-    this.state.subs = new Map(this.state.subs || undefined)
+    configureSaveAndLoadState(this, 'localStorage',
+      {
+        field: 'subs',
+        preprocess: subs => Array.from(subs.entries()),
+        postprocess: subs => new Map(subs || undefined)
+      }
+    )
+    this.load()
+    console.log(this.state)
     const target = this
     registerGenericHandlers({ target, actions }, 'click')
     this.addEventListener('budgetDeleted', this)
@@ -31,7 +39,7 @@ export class DailyBudget extends Tonic {
 
   willConnect () {
     console.log(this.state, this.props)
-    this.state.current ??= this.props.value
+    this.state.current ??= parseInt(this.props.value)
   }
 
   budgetAdded (e) {
@@ -75,14 +83,8 @@ export class DailyBudget extends Tonic {
     return 'isSub' in this.props
   }
 
-  save () {
-    this.state.subs = Array.from(this.state.subs.entries())
-    window.localStorage.setItem(this.id, JSON.stringify(this.state))
-    this.state.subs = new Map(this.state.subs)
-  }
-
   resetValue () {
-    this.state.current = this.props.value
+    this.state.current = parseInt(this.props.value)
     this.reRender()
   }
 

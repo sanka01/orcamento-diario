@@ -1,5 +1,6 @@
 import Tonic from '@socketsupply/tonic'
 import { registerGenericHandlers } from './eventHandling'
+import { configureSaveAndLoadState } from './persistenceHandling'
 
 const actions = {
   newDaw () {
@@ -15,17 +16,17 @@ const actions = {
 export class ShowBudgets extends Tonic {
   constructor (...args) {
     super(...args)
-    this.state = JSON.parse(window.localStorage.getItem(this.id)) ?? {}
-    this.state.budgets = new Map(this.state.budgets || undefined)
+    configureSaveAndLoadState(this, 'localStorage',
+      {
+        field: 'budgets',
+        preprocess: budgets => Array.from(budgets.entries()),
+        postprocess: budgets => new Map(budgets || undefined)
+      }
+    )
+    this.load()
     const target = this
     registerGenericHandlers({ target, actions }, 'click')
     this.addEventListener('budgetAdded', this)
-  }
-
-  save () {
-    this.state.budgets = Array.from(this.state.budgets.entries())
-    window.localStorage.setItem(this.id, JSON.stringify(this.state))
-    this.state.budgets = new Map(this.state.budgets)
   }
 
   budgetAdded ({ detail: budget }) {
